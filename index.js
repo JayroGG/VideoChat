@@ -23,7 +23,7 @@ app.use('/', routes)
 io.on('connection', (socket) => {
   socket.emit('me', socket.id)
 
-  //Handelers 
+  //Handlers 
   socket.on('disconnect', () => {
     socket.broadcast.emit('call ended')
   })
@@ -33,7 +33,7 @@ io.on('connection', (socket) => {
   })
 
   socket.on('answerCall', (data) => {
-    io.to(data.to.emit('callAccepted'), data.signal)
+    io.to(data.to).emit('callAccepted', data.signal)
   })
 })
 
