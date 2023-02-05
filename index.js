@@ -25,7 +25,7 @@ io.on('connection', (socket) => {
 
   //Handlers 
   socket.on('disconnect', () => {
-    socket.broadcast.emit('call ended')
+    socket.broadcast.emit('callEnded')
   })
 
   socket.on('callUser', ({ userToCall, signalData, from, name }) => {
