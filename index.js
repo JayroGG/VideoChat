@@ -21,25 +21,49 @@ app.use('/', routes)
 
 //socket conecction
 io.on('connection', (socket) => {
-  socket.emit('me', socket.id)
+  try {
+    socket.emit('me', socket.id)
+  } catch (error) {
+    socket.emit(error)
+  }
+
 
   //Handlers 
   socket.on('disconnect', () => {
-    socket.broadcast.emit('callEnded')
+    try {
+      socket.broadcast.emit('callEnded')
+    } catch (error) {
+      socket.emit(error)
+    }
   })
 
+
   socket.on('callUser', ({ userToCall, signalData, from, name }) => {
-    io.to(userToCall).emit('callUser', { signal: signalData, from, name })
+    try {
+      io.to(userToCall).emit('callUser', { signal: signalData, from, name })
+    } catch (error) {
+      socket.emit(error)
+    }
+    
   })
 
   socket.on('answerCall', (data) => {
-    io.to(data.to).emit('callAccepted', data.signal)
+    try {
+      io.to(data.to).emit('callAccepted', data.signal)
+    } catch (error) {
+      socket.emmit(error)
+    }
   })
 })
 
 //Serving port
 const port = process.env.PORT || 4000
-server.listen(port, () => console.log(`Server Lister on port ${port}`))
+try {
+  server.listen(port, () => console.log(`Server Lister on port ${port}`))
+} catch (error) {
+  socket.emit(error)
+}
+
 
 
 
